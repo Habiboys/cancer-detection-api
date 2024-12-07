@@ -44,5 +44,5 @@ jobs:
                     --image=gcr.io/${{ secrets.GCLOUD_PROJECT_ID}}/cc-service \
                     --region=${{ secrets.GCLOUD_REGION }} \
                     --platform=managed \
-                    --allow-unauthenticated \
-                    --debug
+                    --allow-unauthenticated 
+                 
