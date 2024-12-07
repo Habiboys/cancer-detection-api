@@ -1,21 +1,25 @@
-const { Storage } = require('@google-cloud/storage');
+const tf = require('@tensorflow/tfjs-node');
 require('dotenv').config();
-
-// Gunakan path ke key.json
-const storage = new Storage({
-  keyFilename: process.env.KEY
-});
-
-const bucketName = process.env.BUCKET_NAME;
-
+const bucket_name =process.env.BUCKET_NAME;
 async function loadModelFromBucket() {
-  const bucket = storage.bucket(bucketName);
-  const file = bucket.file('model.json');
-  
-  await file.download({ destination: './model/model.json' });
-  
-  const model = await tf.loadLayersModel('file://./model/model.json');
-  return model;
+  try {
+    console.log('Memulai proses loading model dari Cloud Storage URL');
+    
+    const modelUrl = `https://storage.googleapis.com/${bucket_name}/model.json`;
+    
+    const model = await tf.loadLayersModel(modelUrl);
+    
+    if (model) {
+      console.log('Model berhasil dimuat dari Cloud Storage URL');
+      return model;
+    } else {
+      console.error('Gagal memuat model dari URL');
+      throw new Error('Model tidak dapat dimuat');
+    }
+  } catch (error) {
+    console.error('Error dalam proses loading model:', error);
+    throw error;
+  }
 }
 
 module.exports = { loadModelFromBucket };
