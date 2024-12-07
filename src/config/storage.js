@@ -3,7 +3,7 @@ require('dotenv').config();
 
 async function loadModelFromBucket() {
   try {
-    console.log('Memulai proses loading model dari Cloud Storage URL:');
+    console.log('Memulai proses loading modell dari Cloud Storage URL:');
     
     const modelUrl = `https://storage.googleapis.com/model-cancer-detection-nouval/model.json`;
     

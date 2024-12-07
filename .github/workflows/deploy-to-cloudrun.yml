@@ -27,7 +27,7 @@ jobs:
 
             - name: Create Service Account Key File
               run: |
-                  cd src
+                  cd src/config
                   echo '${{ secrets.KEY_STORAGE_FIRESTORE }}' > key.json
 
             - name: Authenticate Docker with GCP
