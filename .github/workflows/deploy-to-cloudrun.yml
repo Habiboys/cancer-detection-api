@@ -27,7 +27,7 @@ jobs:
 
             - name: Create Service Account Key File
               run: |
-                  echo '${{ secrets.KEY_STORAGE_FIRESTORE }}' > key.json
+                  echo '${{ secrets.KEY_STORAGE_FIRESTORE }}' > src/key.json
 
             - name: Authenticate Docker with GCP
               run: gcloud auth configure-docker
@@ -45,4 +45,4 @@ jobs:
                     --region=${{ secrets.GCLOUD_REGION }} \
                     --platform=managed \
                     --allow-unauthenticated \
-                 
+                   
