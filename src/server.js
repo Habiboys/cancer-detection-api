@@ -9,5 +9,5 @@ app.use(express.json());
 app.use(predictRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Servera running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

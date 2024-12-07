@@ -2,7 +2,7 @@ const { Firestore } = require('@google-cloud/firestore');
 
 // Gunakan path ke key.json
 const firestore = new Firestore({
-  keyFilename: './key.json'
+  keyFilename: 'key.json'
 });
 
 const predictionsCollection = firestore.collection('predictions');
