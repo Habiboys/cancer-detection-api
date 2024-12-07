@@ -32,16 +32,18 @@ router.post('/predict', upload.single('image'), async (req, res) => {
 
     res.json({
       status: 'success',
-      message: 'Model is predicted successfully',
+      message: 'Model telah berhasil memprediksi',
       data: predictionData
     });
   } catch (error) {
-    res.status(400).json({
+    console.error('Error dalam melakukan prediksi:', error);
+    res.status(500).json({
       status: 'fail',
       message: 'Terjadi kesalahan dalam melakukan prediksi'
     });
   }
 });
+
 
 router.get('/predict/histories', async (req, res) => {
   try {
