@@ -41,7 +41,7 @@ router.post('/predict', upload.single('image'), async (req, res) => {
     console.error('Error dalam melakukan prediksi:', error);
     res.status(500).json({
       status: 'fail',
-      message: `Terjadi kesalahan dalam melakukan prediksi: ${error.message}`
+      message: `Terjadii kesalahan dalam melakukan prediksi: ${error.message}`
     });
   }
 });
