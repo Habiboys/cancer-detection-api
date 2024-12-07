@@ -1,16 +1,19 @@
 const { Storage } = require('@google-cloud/storage');
+require('dotenv').config();
 
-const storage = new Storage();
-const bucketName = 'your-model-bucket';
+// Gunakan path ke key.json
+const storage = new Storage({
+  keyFilename: process.env.KEY
+});
+
+const bucketName = process.env.BUCKET_NAME;
 
 async function loadModelFromBucket() {
   const bucket = storage.bucket(bucketName);
-  const file = bucket.file('cancer-detection-model/model.json');
+  const file = bucket.file('model.json');
   
-  // Download model ke direktori lokal
   await file.download({ destination: './model/model.json' });
   
-  // Load model menggunakan tfjs
   const model = await tf.loadLayersModel('file://./model/model.json');
   return model;
 }

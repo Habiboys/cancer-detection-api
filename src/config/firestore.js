@@ -1,6 +1,10 @@
 const { Firestore } = require('@google-cloud/firestore');
 
-const firestore = new Firestore();
+// Gunakan path ke key.json
+const firestore = new Firestore({
+  keyFilename: './key.json'
+});
+
 const predictionsCollection = firestore.collection('predictions');
 
 async function savePrediction(predictionData) {
