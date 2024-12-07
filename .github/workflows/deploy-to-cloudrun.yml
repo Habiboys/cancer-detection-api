@@ -27,7 +27,7 @@ jobs:
 
             - name: Create Service Account Key File
               run: |
-                  cd src
+                  cd src/config
                   echo '${{ secrets.KEY }}' > key.json
 
             - name: Authenticate Docker with GCP
