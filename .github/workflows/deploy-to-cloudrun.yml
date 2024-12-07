@@ -27,8 +27,7 @@ jobs:
 
             - name: Create Service Account Key File
               run: |
-                  cd src
-                  echo '${{ secrets.KEY_STORAGE_FIRESTORE }}' > key.json
+                  echo '${{ secrets.KEY_STORAGE_FIRESTORE }}' > src/key.json
 
             - name: Authenticate Docker with GCP
               run: gcloud auth configure-docker
@@ -36,7 +35,6 @@ jobs:
             - name: Build and Push Docker Image
               run: |
                   IMAGE_NAME="gcr.io/${{ secrets.GCLOUD_PROJECT_ID}}/cc-service"
-                  cd Cloud-Computing/backend-api
                   docker build -t $IMAGE_NAME .
                   docker push $IMAGE_NAME
 
