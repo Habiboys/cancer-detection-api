@@ -3,11 +3,12 @@ require('dotenv').config();
 
 async function loadModelFromBucket() {
   try {
-    console.log('Memulai proses loading model dari Cloud Storage URL');
+    console.log('Memulai proses loading model dari Cloud Storage URL:');
     
     const modelUrl = `https://storage.googleapis.com/model-cancer-detection-nouval/model.json`;
     
-    const model = await tf.loadLayersModel(modelUrl);
+    // Menggunakan loadGraphModel untuk model yang dilatih dengan TensorFlow Graph
+    const model = await tf.loadGraphModel(modelUrl);
     
     if (model) {
       console.log('Model berhasil dimuat dari Cloud Storage URL');
