@@ -18,7 +18,9 @@ router.post('/predict', upload.single('image'), async (req, res) => {
       });
     }
 
+    console.log('Gambar berhasil diterima, memulai prediksi...');
     const predictionResult = await predictCancer(req.file.buffer);
+    
     const predictionData = {
       id: uuidv4(),
       result: predictionResult,
@@ -39,10 +41,11 @@ router.post('/predict', upload.single('image'), async (req, res) => {
     console.error('Error dalam melakukan prediksi:', error);
     res.status(500).json({
       status: 'fail',
-      message: 'Terjadi kesalahan dalam melakukan prediksi'
+      message: `Terjadi kesalahan dalam melakukan prediksi: ${error.message}`
     });
   }
 });
+
 
 
 router.get('/predict/histories', async (req, res) => {

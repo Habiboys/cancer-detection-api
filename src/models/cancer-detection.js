@@ -14,30 +14,36 @@ async function loadModel() {
 async function predictCancer(imageBuffer) {
   try {
     const model = await loadModel();
+    console.log('Model berhasil dimuat');
 
     // Mengonversi buffer gambar menjadi tensor
-    const imageTensor = tf.node.decodeImage(imageBuffer);  // Menggunakan fungsi decodeImage untuk mengonversi buffer ke tensor
+    const imageTensor = tf.node.decodeImage(imageBuffer);
+    console.log('Gambar berhasil diubah menjadi tensor');
 
     // Mengubah ukuran gambar agar sesuai dengan input model
-    const resizedImage = tf.image.resizeBilinear(imageTensor, [224, 224]); // Sesuaikan ukuran dengan input yang diharapkan model
+    const resizedImage = tf.image.resizeBilinear(imageTensor, [224, 224]);
+    console.log('Gambar berhasil diresize');
 
-    // Normalisasi gambar (jika diperlukan, tergantung cara model dilatih)
+    // Normalisasi gambar
     const normalizedImage = resizedImage.div(tf.scalar(255));
+    console.log('Gambar berhasil dinormalisasi');
 
-    // Menambahkan batch dimension (model biasanya mengharapkan input dengan dimensi [batch_size, height, width, channels])
+    // Menambahkan batch dimension
     const inputTensor = normalizedImage.expandDims(0);
+    console.log('Tensor input siap untuk prediksi');
 
     // Melakukan prediksi
     const prediction = model.predict(inputTensor);
+    const predictedClass = prediction.argMax(-1).dataSync()[0];  // Ambil kelas dengan probabilitas tertinggi
+    console.log('Prediksi selesai:', predictedClass);
 
-    // Mengambil hasil prediksi (misalnya, probabilitas atau kelas)
-    const predictedClass = prediction.argMax(-1).dataSync()[0]; // Mengambil kelas yang diprediksi
-    return predictedClass === 1 ? 'Cancer' : 'No Cancer';  // Sesuaikan dengan output model Anda
+    return predictedClass === 1 ? 'Cancer' : 'No Cancer'; // Sesuaikan output model Anda
 
   } catch (error) {
-    console.error('Error dalam melakukan prediksi:', error);
+    console.error('Error dalam prediksi:', error);
     throw new Error('Prediksi gagal');
   }
 }
+
 
 module.exports = { predictCancer };
