@@ -36,7 +36,6 @@ jobs:
             - name: Build and Push Docker Image
               run: |
                   IMAGE_NAME="gcr.io/${{ secrets.GCLOUD_PROJECT_ID}}/cc-service"
-                  cd Cloud-Computing/backend-api
                   docker build -t $IMAGE_NAME .
                   docker push $IMAGE_NAME
 
