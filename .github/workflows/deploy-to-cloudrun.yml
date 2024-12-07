@@ -45,4 +45,5 @@ jobs:
                     --region=${{ secrets.GCLOUD_REGION }} \
                     --platform=managed \
                     --allow-unauthenticated \
-                    --set-env-vars BUCKET_NAME=${{ secrets.BUCKET_NAME }}
+                    --set-env-vars BUCKET_NAME=${{ secrets.BUCKET_NAME }} \
+                    --debug

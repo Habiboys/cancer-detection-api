@@ -1,11 +1,11 @@
 const tf = require('@tensorflow/tfjs-node');
 require('dotenv').config();
-const bucket_name =process.env.BUCKET_NAME;
+
 async function loadModelFromBucket() {
   try {
     console.log('Memulai proses loading model dari Cloud Storage URL');
     
-    const modelUrl = `https://storage.googleapis.com/${bucket_name}/model.json`;
+    const modelUrl = `https://storage.googleapis.com/model-cancer-detection-nouval/model.json`;
     
     const model = await tf.loadLayersModel(modelUrl);
     
