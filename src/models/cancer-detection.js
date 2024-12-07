@@ -1,49 +1,52 @@
 const tf = require('@tensorflow/tfjs-node');
 const { loadModelFromBucket } = require('../config/storage');
 
-
 let model;
 
 async function loadModel() {
-  if (!model) {
-    model = await loadModelFromBucket();
-  }
-  return model;
+    if (!model) {
+        model = await loadModelFromBucket();
+    }
+    return model;
 }
 
 async function predictCancer(imageBuffer) {
-  try {
-    const model = await loadModel();
-    console.log('Model berhasil dimuat');
+    try {
+        const model = await loadModel();
+        console.log('Model berhasil dimuat');
 
-    // Mengonversi buffer gambar menjadi tensor
-    const imageTensor = tf.node.decodeImage(imageBuffer);
-    console.log('Gambar berhasil diubah menjadi tensor');
+        // Mengubah preprocessing agar sama dengan kode 1
+        const tensor = tf.node
+            .decodeImage(imageBuffer)
+            .resizeNearestNeighbor([224, 224]) // Menggunakan resizeNearestNeighbor seperti kode 1
+            .expandDims()
+            .toFloat();  // Menggunakan toFloat() seperti kode 1
+        
+        console.log('Tensor input siap untuk prediksi');
 
-    // Mengubah ukuran gambar agar sesuai dengan input model
-    const resizedImage = tf.image.resizeBilinear(imageTensor, [224, 224]);
-    console.log('Gambar berhasil diresize');
+        // Melakukan prediksi
+        const prediction = model.predict(tensor);
+        const score = await prediction.data();
+        const confidenceScore = score[0];
+        
+        console.log('Confidence Score:', confidenceScore);
 
-    // Normalisasi gambar
-    const normalizedImage = resizedImage.div(tf.scalar(255));
-    console.log('Gambar berhasil dinormalisasi');
+        // Menentukan hasil prediksi berdasarkan ambang batas 0.5
+        const label = confidenceScore > 0.5 ? 'Cancer' : 'Non-cancer';
+        console.log('Label:', label);
 
-    // Menambahkan batch dimension
-    const inputTensor = normalizedImage.expandDims(0);
-    console.log('Tensor input siap untuk prediksi');
+        // Menentukan saran berdasarkan label
+        const suggestion = label === 'Cancer' 
+            ? 'Segera periksa ke dokter!' 
+            : 'Penyakit kanker tidak terdeteksi.';
+        console.log('Suggestion:', suggestion);
 
-    // Melakukan prediksi
-    const prediction = model.predict(inputTensor);
-    const predictedClass = prediction.argMax(-1).dataSync()[0];  // Ambil kelas dengan probabilitas tertinggi
-    console.log('Prediksi selesai:', predictedClass);
+        return { confidenceScore, label, suggestion };
 
-    return predictedClass === 1 ? 'Cancer' : 'No Cancer'; // Sesuaikan output model Anda
-
-  } catch (error) {
-    console.error('Error dalam prediksi:', error);
-    throw new Error('Prediksi gagal');
-  }
+    } catch (error) {
+        console.error('Error dalam prediksi:', error);
+        throw new Error('Prediksi gagal');
+    }
 }
-
 
 module.exports = { predictCancer };

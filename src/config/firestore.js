@@ -2,6 +2,7 @@ const { Firestore } = require('@google-cloud/firestore');
 
 // Gunakan path ke key.json
 const firestore = new Firestore({
+  databaseId: 'cancer',
   keyFilename: 'key.json'
 });
 
